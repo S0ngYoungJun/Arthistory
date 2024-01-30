@@ -1,0 +1,38 @@
+.spaceship {
+  position: absolute;
+  font-size: 48px;
+  transition: left 2s, top 2s;
+}
+.top{
+  width:80vw;
+  height:5vh;
+  background-color: lightblue;
+}
+
+.box1{
+  width:25vw;
+  height:45vh;
+  background-color: lightcoral;
+  
+  img{
+    object-fit: cover;
+  }
+}
+
+
+.box2{
+  width:55vw;
+  height:45vh;
+  background-color: lightgray;}
+
+.box3{
+  width:55vw;
+  height:45vh;
+  background-color: lightgreen;
+}
+
+.box4{
+  width:25vw;
+  height:45vh;
+  background-color: lightyellow
+}

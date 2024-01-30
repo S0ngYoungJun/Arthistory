@@ -1,0 +1,25 @@
+.timeline{
+  width: 100vw;
+  height: 15vh;
+  display: flex;
+}
+
+.timelink{
+  font-size: 1.5rem;
+  width:100vw;
+  height:15vh;
+  background-color: white;
+  display:flex;
+  justify-content: space-around;
+  align-items: center;
+
+  a{
+    text-decoration: none;
+    
+  }
+
+  a:hover{
+    background-color: #D8D9DA;
+  }
+
+}
