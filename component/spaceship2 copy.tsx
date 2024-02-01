@@ -22,16 +22,17 @@ interface MarkerData {
 }
 
 interface Spaceship3Props {
-  initialPosition: MarkerData[]; // 여기서 MarkerData는 좌표와 모달 컨텐츠를 포함하는 타입입니다.
+  initialPosition: MarkerData[];
+  parentDimensions: { width: number; height: number }; // 부모 컨테이너의 크기를 전달받습니다.
 }
 
-const Spaceship3 = ({ initialPosition }: Spaceship3Props) => {
+const Spaceship3 =  ({ initialPosition, parentDimensions,}: Spaceship3Props) => {
   const [positionIndex, setPositionIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMoving, setIsMoving] = useState(false); // 초기에 isMoving을 false로 설정
   const [targetPoint, setTargetPoint] = useState<Coordinate | null>(null); 
   const [modalContent, setModalContent] = useState<ModalContent>({ box1: '', box2: '', box3: '', box4: '' });
-
+ 
   const currentPosition = useMemo(() => initialPosition[positionIndex], [positionIndex,initialPosition]);
 
   const flyToTarget = (pointIndex: number) => {
@@ -61,11 +62,12 @@ const Spaceship3 = ({ initialPosition }: Spaceship3Props) => {
         }, 2000); // 3초 후에 실행
         setTargetPoint(null); // 목표 지점에 도달했으므로 초기화
         setPositionIndex(initialPosition.findIndex(p => p.coordinate.x === targetPoint.x && p.coordinate.y === targetPoint.y)); // 목표 지점의 인덱스로 업데이트
-      } else {
-        const newX = currentPosition.x + (step * (targetPoint.x - currentPosition.x)) / distance;
-        const newY = currentPosition.y + (step * (targetPoint.y - currentPosition.y)) / distance;
-        // 여기에서 currentPosition을 업데이트해야 합니다 (예: setState를 사용하여 위치 상태 업데이트)
-      }
+      } 
+      // else {
+      //   const newX = currentPosition.x + (step * (targetPoint.x - currentPosition.x)) / distance;
+      //   const newY = currentPosition.y + (step * (targetPoint.y - currentPosition.y)) / distance;
+      //   // 여기에서 currentPosition을 업데이트해야 합니다 (예: setState를 사용하여 위치 상태 업데이트)
+      // }
     }
   }, [isMoving, targetPoint, positionIndex,initialPosition]);
 
@@ -82,9 +84,10 @@ const Spaceship3 = ({ initialPosition }: Spaceship3Props) => {
 
   const renderMarkers = () => {
     // 부모 요소의 크기를 가정
-    const parentWidth = 1480; // 예시 값
-    const parentHeight = 600; // 예시 값
-  
+    const parentWidth = parentDimensions.width; // 부모 컨테이너의 너비 사용
+    const parentHeight = parentDimensions.height; 
+
+
     return initialPosition.map((point, index) => {
       // 백분율로 위치 계산
       const leftPercentage = (point.coordinate.x / parentWidth) * 100;
