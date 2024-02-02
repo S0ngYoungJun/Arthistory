@@ -1,9 +1,9 @@
 "use client"
-import React ,{ useEffect, useState} from 'react';
+import React ,{ useEffect, useState , useRef} from 'react';
 import Spaceship3 from '@/component/spaceship2 copy';
-import backgroundImage from "@/public/image/지도2.jpg";
 import Timeline from '@/component/timeline/timeline';
-import styles from '@/component/spaceship2.module.scss'
+import Image from 'next/image';
+
 
 interface Coordinate {
   x: number;
@@ -22,26 +22,37 @@ interface MarkerData {
 }
 
 const App = () => {
-  const [parentDimensions, setParentDimensions] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0
-  });
-  
+  const [parentDimensions, setParentDimensions] = useState({ width: 0, height: 0 });
+  const europeRef = useRef<HTMLDivElement>(null); // europe div에 대한 ref
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // 창의 크기가 변경될 때마다 parentDimensions를 업데이트합니다.
-      const handleResize = () => {
-        setParentDimensions({ width: window.innerWidth, height: window.innerHeight });
-      };
+    const updateSize = () => {
+      if (europeRef.current) {
+        setParentDimensions({
+          width: europeRef.current.offsetWidth,
+          height: europeRef.current.offsetHeight,
+        });
+      }
+    };
 
-      window.addEventListener('resize', handleResize);
+    // 초기 크기 설정
+    updateSize();
 
-      // 컴포넌트 언마운트 시에 리스너를 제거합니다.
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
+    // ResizeObserver를 사용하여 europe div의 크기 변화 감지
+    const resizeObserver = new ResizeObserver(() => {
+      updateSize();
+    });
+
+    if (europeRef.current) {
+      resizeObserver.observe(europeRef.current);
     }
+
+    // Cleanup 함수
+    return () => {
+      if (europeRef.current) {
+        resizeObserver.unobserve(europeRef.current);
+      }
+    };
   }, []);
 
   const initialPosition: MarkerData[] = [
@@ -78,14 +89,13 @@ const App = () => {
 
   
   return (
-    <div style={{  width: '100vw', height: '100vh', display:'flex', flexDirection:'column' }}>
+    <div style={{  width: '100vw', height: '100vh', display:'flex', flexDirection:'column', alignItems:'center' }}>
       <div style={{  width: '100vw', height: '15vh'}}><Timeline></Timeline></div>
-      <div style={{  width: '100vw', height: '85vh', position: 'relative' ,
-        backgroundImage: `url(${backgroundImage.src})`,
-        backgroundPosition:"center",
-        backgroundSize:'contain',
-        objectFit:"fill",
-        backgroundRepeat: "no-repeat",}}>
+      <div 
+      ref={europeRef}
+      className="europe"
+      style={{  width: '55vw', height: '85vh',position:"relative"}}>
+      <Image fill={true} src={`/image/지도2.jpg`} alt={'일단소개'} />
       <Spaceship3 initialPosition={initialPosition} parentDimensions={parentDimensions}/>
       </div>
     </div>

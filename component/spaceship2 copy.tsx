@@ -32,15 +32,25 @@ const Spaceship3 =  ({ initialPosition, parentDimensions,}: Spaceship3Props) => 
   const [isMoving, setIsMoving] = useState(false); // 초기에 isMoving을 false로 설정
   const [targetPoint, setTargetPoint] = useState<Coordinate | null>(null); 
   const [modalContent, setModalContent] = useState<ModalContent>({ box1: '', box2: '', box3: '', box4: '' });
+  const [currentMarkerPositions, setCurrentMarkerPositions] = useState<Coordinate[]>([]);
+  const [planePosition, setPlanePosition] = useState<Coordinate>({ x: 30, y: 30 });
 
   const currentPosition = useMemo(() => initialPosition[positionIndex], [positionIndex,initialPosition]);
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 비행기의 초기 위치를 (30, 30)으로 설정
+    setPlanePosition({ x: 30, y: 30 });
+  }, []); // 의존성 배열을 비워 컴포넌트 마운트 시에만 실행되도록 함
 
   const flyToTarget = (pointIndex: number) => {
     const target = initialPosition[pointIndex].coordinate;
-    setTargetPoint(target); // 여기를 수정했습니다릭한 마커의 좌표를 targetPoint로 설정
+    setTargetPoint(target);
     setPositionIndex(pointIndex);
     setModalContent(initialPosition[pointIndex].modalContent);
     setIsMoving(true);
+    const xxx= target.x* 17/20
+    const yyy= target.y* 5/8
+    // 비행기의 위치를 클릭한 마커의 위치로 업데이트
+    setPlanePosition({ x: xxx, y:  yyy}); // 여기서 위치 업데이트
   };
 
   useEffect(() => {
@@ -71,7 +81,18 @@ const Spaceship3 =  ({ initialPosition, parentDimensions,}: Spaceship3Props) => 
     }
   }, [isMoving, targetPoint, positionIndex,initialPosition]);
 
- 
+  useEffect(() => {
+    const newMarkerPositions = initialPosition.map(marker => {
+      const xPercentage = marker.coordinate.x / 1000; // 예시 비율 계산
+      const yPercentage = marker.coordinate.y / 1000; // 예시 비율 계산
+      return {
+        x: xPercentage * parentDimensions.width,
+        y: yPercentage * parentDimensions.height
+      };
+    });
+    setCurrentMarkerPositions(newMarkerPositions);
+  }, [initialPosition, parentDimensions]);
+  
   const openModal = () => {
     setIsModalOpen(true);
     setIsMoving(false);
@@ -83,37 +104,57 @@ const Spaceship3 =  ({ initialPosition, parentDimensions,}: Spaceship3Props) => 
   };
 
   const renderMarkers = () => {
-    // 부모 요소의 크기를 가정
-    const parentWidth = parentDimensions.width; // 부모 컨테이너의 너비 사용
-    const parentHeight = parentDimensions.height; 
+    return currentMarkerPositions.map((position, index) => (
+      <div
+        key={index}
+        style={{
+          position: 'absolute',
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          width: '10px',
+          height: '10px',
+          backgroundColor: 'red',
+          borderRadius: '50%',
+          transform: 'translate(-50%, -50%)', // 정확한 위치 조정
+        }}
+        onClick={() => flyToTarget(index)}
+      />
+    ));
+  };
 
 
-    return initialPosition.map((point, index) => {
-      // 백분율로 위치 계산
-      const leftPercentage = (point.coordinate.x / parentWidth) * 100;
-      const topPercentage = (point.coordinate.y / parentHeight) * 100;
-  
-      return (
-        <div
-          key={index}
-          style={{
-            position: 'absolute',
-            left: `${leftPercentage}%`,
-            top: `${topPercentage * 5/4}%`,
-            width: 10,
-            height: 10,
-            backgroundColor: 'red',
-            borderRadius: '50%'
-          }}
-          onClick={() => flyToTarget(index)}
-        />
-      );
-    });}
+    useEffect(() => {
+      // parentDimensions 상태가 변경될 때 실행될 로직
+      const recalculateMarkerPositions = () => {
+        const newInitialPosition = initialPosition.map(marker => {
+          // 화면 크기에 따라 새로운 마커 위치 계산
+          // 예: 화면 너비와 높이에 대한 마커의 위치 비율을 계산
+          const newX = (marker.coordinate.x / 1000) * parentDimensions.width;
+          const newY = (marker.coordinate.y / 1000) * parentDimensions.height;
+          return {
+            ...marker,
+            coordinate: { x: newX, y: newY }
+          };
+        });
+    
+        // 필요한 경우, 새로운 위치 정보를 상태에 저장하고 마커를 업데이트하는 로직을 여기에 추가
+        // 예: setInitialPosition(newInitialPosition); (이 경우 initialPosition 상태 관리 필요)
+      };
+    
+      recalculateMarkerPositions();
+    }, [parentDimensions, initialPosition]);
 
   return (
     <div>
       {renderMarkers()} {/* 이 부분에 마커를 렌더링합니다. */}
-      <div className={styles.spaceship} style={{ left: currentPosition.coordinate.x, top: currentPosition.coordinate.y }}>
+      <div
+        className={styles.spaceship}
+        style={{
+          position: 'absolute',
+          left: `${planePosition.x}px`, // 비행기 위치 상태를 사용하여 위치 설정
+          top: `${planePosition.y}px`,
+          transform: 'translate(-50%, -50%)' // 비행기 이미지의 중심이 정확한 위치를 가리키도록 조정
+        }}>
         <FontAwesomeIcon icon={faPlane} size="1x" />
       </div>
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
