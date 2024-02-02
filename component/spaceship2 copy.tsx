@@ -32,7 +32,7 @@ const Spaceship3 =  ({ initialPosition, parentDimensions,}: Spaceship3Props) => 
   const [isMoving, setIsMoving] = useState(false); // 초기에 isMoving을 false로 설정
   const [targetPoint, setTargetPoint] = useState<Coordinate | null>(null); 
   const [modalContent, setModalContent] = useState<ModalContent>({ box1: '', box2: '', box3: '', box4: '' });
- 
+
   const currentPosition = useMemo(() => initialPosition[positionIndex], [positionIndex,initialPosition]);
 
   const flyToTarget = (pointIndex: number) => {
@@ -99,7 +99,7 @@ const Spaceship3 =  ({ initialPosition, parentDimensions,}: Spaceship3Props) => 
           style={{
             position: 'absolute',
             left: `${leftPercentage}%`,
-            top: `${topPercentage}%`,
+            top: `${topPercentage * 5/4}%`,
             width: 10,
             height: 10,
             backgroundColor: 'red',

@@ -22,21 +22,26 @@ interface MarkerData {
 }
 
 const App = () => {
-
-  const [parentDimensions, setParentDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const [parentDimensions, setParentDimensions] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0
+  });
+  
 
   useEffect(() => {
-    // 창의 크기가 변경될 때마다 parentDimensions를 업데이트합니다.
-    const handleResize = () => {
-      setParentDimensions({ width: window.innerWidth, height: window.innerHeight });
-    };
+    if (typeof window !== 'undefined') {
+      // 창의 크기가 변경될 때마다 parentDimensions를 업데이트합니다.
+      const handleResize = () => {
+        setParentDimensions({ width: window.innerWidth, height: window.innerHeight });
+      };
 
-    window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResize);
 
-    // 컴포넌트 언마운트 시에 리스너를 제거합니다.
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+      // 컴포넌트 언마운트 시에 리스너를 제거합니다.
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
   }, []);
 
   const initialPosition: MarkerData[] = [

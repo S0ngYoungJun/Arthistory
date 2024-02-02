@@ -22,21 +22,38 @@ interface MarkerData {
 }
 
 const App = () => {
+  const [parentDimensions, setParentDimensions] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0
+  });
+  
+  const recalculatePosition = (coordinate: Coordinate) => {
+    const parentWidth = parentDimensions.width;
+    const parentHeight = parentDimensions.height;
+    // 예: 부모 크기에 따른 새로운 좌표 계산
+    // 여기서는 단순히 같은 비율을 유지하면서 크기를 조정합니다.
+    // 실제 애플리케이션에서는 좌표 시스템에 따라 계산 방식이 달라질 수 있습니다.
+    return {
+      x: coordinate.x * parentWidth / 1000, // 예시 비율 계산, 1000은 초기 설정된 너비
+      y: coordinate.y * parentHeight / 1000 // 예시 비율 계산, 1000은 초기 설정된 높이
+    };
+  };
 
-  const [parentDimensions, setParentDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
-
+  
   useEffect(() => {
-    // 창의 크기가 변경될 때마다 parentDimensions를 업데이트합니다.
-    const handleResize = () => {
-      setParentDimensions({ width: window.innerWidth, height: window.innerHeight });
-    };
+    if (typeof window !== 'undefined') {
+      // 창의 크기가 변경될 때마다 parentDimensions를 업데이트합니다.
+      const handleResize = () => {
+        setParentDimensions({ width: window.innerWidth, height: window.innerHeight });
+      };
 
-    window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResize);
 
-    // 컴포넌트 언마운트 시에 리스너를 제거합니다.
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+      // 컴포넌트 언마운트 시에 리스너를 제거합니다.
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
   }, []);
 
   const initialPosition: MarkerData[] = [
