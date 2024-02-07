@@ -1,6 +1,6 @@
 "use client"
 import React ,{ useEffect, useState , useRef} from 'react';
-import Spaceship3 from '@/component/spaceship2 copy';
+import Spaceship3 from '@/component/spaceship';
 import Timeline from '@/component/timeline/timeline';
 import Image from 'next/image';
 
@@ -89,7 +89,7 @@ const App = () => {
 
   
   return (
-    <div style={{  width: '100vw', height: '100vh', display:'flex', flexDirection:'column', alignItems:'center' }}>
+    <div style={{  width: '100vw', height: '100vh', display:'flex', flexDirection:'column', alignItems:'center',backgroundColor:"#9DB2BF" }}>
       <div style={{  width: '100vw', height: '15vh'}}><Timeline></Timeline></div>
       <div 
       ref={europeRef}

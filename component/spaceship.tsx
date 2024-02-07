@@ -1,6 +1,6 @@
 "use client"
-import React, { useState, useEffect, useMemo } from 'react';
-import styles from "@/component/spaceship2.module.scss";
+import React, { useState, useEffect} from 'react';
+import styles from "@/app/styles/spaceship.module.scss"
 import Modal from './Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlane } from '@fortawesome/free-solid-svg-icons';
@@ -31,9 +31,7 @@ interface Spaceship3Props {
 const Spaceship3 = ({ initialPosition, parentDimensions }: Spaceship3Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMoving, setIsMoving] = useState(false); // 초기에 isMoving을 false로 설정
-  const [targetPoint, setTargetPoint] = useState<Coordinate | null>(null); 
   const [modalContent, setModalContent] = useState<ModalContent>({ box1: '', box2: '', box3: '', box4: '' });
-  const [currentMarkerPositions, setCurrentMarkerPositions] = useState<Coordinate[]>([]);
   const [planePosition, setPlanePosition] = useState<Coordinate>({ x: 30, y: 30 });
   
 

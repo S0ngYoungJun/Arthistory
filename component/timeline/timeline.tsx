@@ -1,5 +1,5 @@
 import NavLinks from '@/component/timeline/nav-links'
-import styles from "./timeline.module.scss"
+import styles from "@/app/styles/timeline.module.scss"
 
 export default function Timeline() {
 

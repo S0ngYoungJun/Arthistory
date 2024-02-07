@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
-import styles from "@/component/modal.module.scss"
+import styles from "@/app/styles/modal.module.scss"
 
 interface ModalProps {
   open: boolean;
