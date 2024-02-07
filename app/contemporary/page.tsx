@@ -3,7 +3,7 @@ import React ,{ useEffect, useState , useRef} from 'react';
 import Spaceship3 from '@/component/spaceship';
 import Timeline from '@/component/timeline/timeline';
 import Image from 'next/image';
-
+import styles from '@/app/styles/main.module.scss'
 
 interface Coordinate {
   x: number;
@@ -24,7 +24,20 @@ interface MarkerData {
 const App = () => {
   const [parentDimensions, setParentDimensions] = useState({ width: 0, height: 0 });
   const europeRef = useRef<HTMLDivElement>(null); // europe div에 대한 ref
+  const [selectedText, setSelectedText] = useState('');
+  const [animationKey, setAnimationKey] = useState(0);
 
+  const buttonsInfo = [
+    { id: 1, text: '크레타', info: '버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.' },
+    { id: 2, text: '그리스', info: '버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.' },
+    { id: 3, text: '로마', info: '버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.' },
+   
+  ];
+
+  const handleButtonClick = (info : any) => {
+    setSelectedText(info); // 클릭된 버튼에 할당된 텍스트로 상태 업데이트
+    setAnimationKey(prevKey => prevKey + 1); 
+  };
   useEffect(() => {
     const updateSize = () => {
       if (europeRef.current) {
@@ -56,13 +69,6 @@ const App = () => {
   }, []);
 
   const initialPosition: MarkerData[] = [
-    { coordinate: { x: 10, y: 10 },  modalContent: {
-      box1: 'paaer용',
-      box2: 'wfeff',
-      box3: 'Box 3 내용',
-      box4: 'paterg2.jpg'
-    }
-  },
     { coordinate: { x: 640, y: 450 }, modalContent: {
       box1: '/image/꽃을따는플로라.jpg',
       box2: '폼페이의 부유한 사람들이 집안을 벽화나 모자이크화로 장식해서 생활의 여유를 과시했는데, 이 그림은 그중 하나다.이 그림에서 특이한 점은 뒷모습을 그렸다는 것이다. 정면의 모습을 모든 동작에서 중심으로 삼았던 고대 시대 그림의 관습에서 벗어났음을 알려 준다. 화가들이 다양한 자세와 모습에 서서히 눈을 뜨면서 그림이 좀 더 풍성해졌다. 부드럽고 쾌활한 느낌을 주기 위해서 곡선 흐름을 강조했고, 파스텔톤의 색을 사용해서 주변의 봄기운도 느끼게 했다. ',
@@ -89,14 +95,26 @@ const App = () => {
 
   
   return (
-    <div style={{  width: '100vw', height: '100vh', display:'flex', flexDirection:'column', alignItems:'center',backgroundColor:"#9DB2BF" }}>
-      <div style={{  width: '100vw', height: '15vh'}}><Timeline></Timeline></div>
+    <div className={styles.main}>
+      <div className={styles.top}><Timeline></Timeline></div>
+      <div className={styles.flow}>
+        {buttonsInfo.map((button) => (
+            <button key={button.id} className={styles.button} onClick={() => handleButtonClick(button.info)}>
+              {button.text}
+            </button>
+          ))}
+      </div>
       <div 
       ref={europeRef}
       className="europe"
       style={{  width: '55vw', height: '85vh',position:"relative"}}>
       <Image fill={true} src={`/image/지도2.jpg`} alt={'일단소개'} />
       <Spaceship3 initialPosition={initialPosition} parentDimensions={parentDimensions}/>
+      </div>
+      <div className={styles.info}>
+        <div key={animationKey} className={styles.scrollAnimation}>
+            {selectedText}
+        </div>
       </div>
     </div>
   );

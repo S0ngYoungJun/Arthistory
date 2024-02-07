@@ -1,0 +1,54 @@
+.main{
+  width: 100vw ;
+  height: 100vh ;
+  display: flex ;
+  flex-wrap: wrap;
+}
+.top{
+  width: 100vw;
+  height: 15vh;
+}
+.flow{
+  width:20vw;
+  height:85vh;
+  display: flex;
+  flex-direction: column;
+  background-Color:#9DB2BF;
+  align-items: center;
+  justify-content: space-around;
+}
+.info{
+  width:25vw;
+  height:85vh;
+  background-Color:#9DB2BF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.button{
+  font-size: 2rem;
+  width: 15vw;
+  height:10vh;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+
+@keyframes scrollUnroll {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.scrollAnimation {
+  animation: scrollUnroll 0.5s ease forwards;
+  transform-origin: top;
+  overflow: hidden;
+  width:20vw;
+  margin-top:5vh;
+  // 필요에 따라 추가 스타일링
+}
+
+

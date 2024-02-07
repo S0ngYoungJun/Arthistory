@@ -3,8 +3,7 @@ import React ,{ useEffect, useState , useRef} from 'react';
 import Spaceship3 from '@/component/spaceship';
 import Timeline from '@/component/timeline/timeline';
 import Image from 'next/image';
-
-
+import styles from '@/app/styles/main.module.scss'
 interface Coordinate {
   x: number;
   y: number;
@@ -24,7 +23,21 @@ interface MarkerData {
 const App = () => {
   const [parentDimensions, setParentDimensions] = useState({ width: 0, height: 0 });
   const europeRef = useRef<HTMLDivElement>(null); // europe div에 대한 ref
+  const [selectedText, setSelectedText] = useState('');
+  const [animationKey, setAnimationKey] = useState(0);
 
+  const buttonsInfo = [
+    { id: 1, text: '크레타', info: '버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.버튼 1에 대한 정보입니다.' },
+    { id: 2, text: '그리스', info: '버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.버튼 2에 대한 정보입니다.' },
+    { id: 3, text: '로마', info: '버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.버튼 3에 대한 정보입니다.' },
+   
+  ];
+
+  const handleButtonClick = (info : any) => {
+    setSelectedText(info); // 클릭된 버튼에 할당된 텍스트로 상태 업데이트
+    setAnimationKey(prevKey => prevKey + 1); 
+  };
+  
   useEffect(() => {
     const updateSize = () => {
       if (europeRef.current) {
@@ -82,14 +95,26 @@ const App = () => {
 
   
   return (
-    <div style={{  width: '100vw', height: '100vh', display:'flex', flexDirection:'column', alignItems:'center' ,backgroundColor:"#9DB2BF"}}>
-      <div style={{  width: '100vw', height: '15vh'}}><Timeline></Timeline></div>
+    <div className={styles.main}>
+      <div className={styles.top}><Timeline></Timeline></div>
+      <div className={styles.flow}>
+        {buttonsInfo.map((button) => (
+            <button key={button.id} className={styles.button} onClick={() => handleButtonClick(button.info)}>
+              {button.text}
+            </button>
+          ))}
+      </div>
       <div 
       ref={europeRef}
       className="europe"
       style={{  width: '55vw', height: '85vh',position:"relative"}}>
       <Image fill={true} src={`/image/지도2.jpg`} alt={'일단소개'} />
       <Spaceship3 initialPosition={initialPosition} parentDimensions={parentDimensions}/>
+      </div>
+      <div className={styles.info}>
+        <div key={animationKey} className={styles.scrollAnimation}>
+            {selectedText}
+        </div>
       </div>
     </div>
   );
