@@ -21,6 +21,7 @@ interface ModalContent {
 interface MarkerData {
   coordinate: Coordinate;
   modalContent: ModalContent;
+  name: string;
 }
 
 interface Spaceship3Props {
@@ -70,15 +71,20 @@ const Spaceship3 = ({ initialPosition, parentDimensions }: Spaceship3Props) => {
              position: 'absolute',
              left: `${marker.coordinate.x}px`,
              top: `${marker.coordinate.y}px`,
-             width: '10px',
-             height: '10px',
-             backgroundColor: 'red',
-             borderRadius: '50%',
              cursor: 'pointer',
              transform: 'translate(-50%, -50%)',
+             // 스타일링을 추가하여 이름이 더 잘 보이도록 할 수 있습니다.
+             backgroundColor: 'rgba(0,0,0,0.5)',
+             color: 'white',
+             padding: '5px 10px',
+             borderRadius: '10px',
+             textAlign: 'center',
+             whiteSpace: 'nowrap',
            }}
            onClick={() => flyToTarget(index)}
-      />
+      >
+        {marker.name}
+      </div>
     ));
   };
 
