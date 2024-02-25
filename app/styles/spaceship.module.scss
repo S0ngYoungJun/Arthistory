@@ -4,9 +4,11 @@
   transition: left 2s, top 2s;
 }
 .top{
+  display:flex;
   width:80vw;
   height:5vh;
-  background-color: lightblue;
+  background-color: #DDE6ED;
+  justify-content: flex-end;
 }
 
 .box1{
