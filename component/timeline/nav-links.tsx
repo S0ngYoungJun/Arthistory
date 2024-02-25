@@ -9,8 +9,7 @@ const links = [
   { name: "중세", href: "/medieval" },
   { name: "르네상스", href: "/renaissance" },
   { name: "바로크/로코코", href: "/baroquerococo" },
-  { name: "근대", href: "/modern" },
-  { name: "현대", href: "/contemporary" },
+  { name: "근현대", href: "/modern" },
 ];
 
 export default function NavLinks() {
