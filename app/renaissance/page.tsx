@@ -40,34 +40,37 @@ const App = () => {
     setAnimationKey(prevKey => prevKey + 1); 
   };
   useEffect(() => {
+    // 효과 함수 내에서 europeRef.current 값을 로컬 변수에 복사
+    const currentRef = europeRef.current;
+  
     const updateSize = () => {
-      if (europeRef.current) {
+      if (currentRef) {
         setParentDimensions({
-          width: europeRef.current.offsetWidth,
-          height: europeRef.current.offsetHeight,
+          width: currentRef.offsetWidth,
+          height: currentRef.offsetHeight,
         });
       }
     };
-
+  
     // 초기 크기 설정
     updateSize();
-
-    // ResizeObserver를 사용하여 europe div의 크기 변화 감지
+  
+    // ResizeObserver를 사용하여 크기 변화 감지
     const resizeObserver = new ResizeObserver(() => {
       updateSize();
     });
-
-    if (europeRef.current) {
-      resizeObserver.observe(europeRef.current);
+  
+    if (currentRef) {
+      resizeObserver.observe(currentRef);
     }
-
-    // Cleanup 함수
+  
+    // 클린업 함수에서는 복사된 로컬 변수를 사용
     return () => {
-      if (europeRef.current) {
-        resizeObserver.unobserve(europeRef.current);
+      if (currentRef) {
+        resizeObserver.unobserve(currentRef);
       }
     };
-  }, []);
+  }, []); // 의존성 배열이 빈 배열이라면 효과는 컴포넌트 마운트 시 한 번만 실행됩니다.
 
   const initialPosition: MarkerData[] = [
     { coordinate: { x: 400, y: 800  }, modalContent: {
