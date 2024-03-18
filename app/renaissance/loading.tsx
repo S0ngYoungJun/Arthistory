@@ -5,7 +5,7 @@ export default function Loading() {
  
   return (
   <div className={styles.main}>
-    <Image fill={true} src={"/image/라오콘군상.jpg"} alt={"고대"}/>
+    <Image fill={true} src={"/image/파르나소스.jpg"} alt={"고대"}/>
   </div>
   )
 }
